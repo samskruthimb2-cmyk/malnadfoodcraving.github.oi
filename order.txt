@@ -1,0 +1,595 @@
+// ================================
+// Data
+// ================================
+const categories = [
+    { id: 'all', name: 'All', icon: '🍽️' },
+    { id: 'burgers', name: 'Burgers', icon: '🍔' },
+    { id: 'pizza', name: 'Pizza', icon: '🍕' },
+    { id: 'sushi', name: 'Sushi', icon: '🍣' },
+    { id: 'pasta', name: 'Pasta', icon: '🍝' },
+    { id: 'salads', name: 'Salads', icon: '🥗' },
+    { id: 'desserts', name: 'Desserts', icon: '🍰' },
+    { id: 'drinks', name: 'Drinks', icon: '🥤' }
+];
+
+const menuItems = [
+    {
+        id: 1,
+        name: 'Classic Cheeseburger',
+        description: 'Juicy beef patty with melted cheddar, fresh lettuce, tomato, and our secret sauce',
+        price: 12.99,
+        category: 'burgers',
+        icon: '🍔',
+        rating: 4.8,
+        badge: 'Popular'
+    },
+    {
+        id: 2,
+        name: 'Margherita Pizza',
+        description: 'Fresh mozzarella, tomato sauce, basil on a crispy thin crust',
+        price: 14.99,
+        category: 'pizza',
+        icon: '🍕',
+        rating: 4.9,
+        badge: 'Best Seller'
+    },
+    {
+        id: 3,
+        name: 'Salmon Roll',
+        description: 'Fresh salmon, avocado, cucumber with special spicy mayo',
+        price: 16.99,
+        category: 'sushi',
+        icon: '🍣',
+        rating: 4.7
+    },
+    {
+        id: 4,
+        name: 'Spaghetti Carbonara',
+        description: 'Creamy pasta with crispy bacon, parmesan, and black pepper',
+        price: 13.99,
+        category: 'pasta',
+        icon: '🍝',
+        rating: 4.6
+    },
+    {
+        id: 5,
+        name: 'Caesar Salad',
+        description: 'Crisp romaine, parmesan, croutons with classic caesar dressing',
+        price: 10.99,
+        category: 'salads',
+        icon: '🥗',
+        rating: 4.5
+    },
+    {
+        id: 6,
+        name: 'Chocolate Lava Cake',
+        description: 'Warm chocolate cake with a molten center, served with vanilla ice cream',
+        price: 8.99,
+        category: 'desserts',
+        icon: '🍫',
+        rating: 4.9,
+        badge: 'Chef\'s Special'
+    },
+    {
+        id: 7,
+        name: 'BBQ Bacon Burger',
+        description: 'Double patty with crispy bacon, BBQ sauce, and onion rings',
+        price: 15.99,
+        category: 'burgers',
+        icon: '🍔',
+        rating: 4.7
+    },
+    {
+        id: 8,
+        name: 'Pepperoni Pizza',
+        description: 'Loaded with pepperoni, mozzarella, and our signature tomato sauce',
+        price: 15.99,
+        category: 'pizza',
+        icon: '🍕',
+        rating: 4.8
+    },
+    {
+        id: 9,
+        name: 'Dragon Roll',
+        description: 'Eel, crab, cucumber topped with avocado and eel sauce',
+        price: 18.99,
+        category: 'sushi',
+        icon: '🐉',
+        rating: 4.8
+    },
+    {
+        id: 10,
+        name: 'Fettuccine Alfredo',
+        description: 'Rich and creamy alfredo sauce over fresh fettuccine',
+        price: 12.99,
+        category: 'pasta',
+        icon: '🍝',
+        rating: 4.5
+    },
+    {
+        id: 11,
+        name: 'Greek Salad',
+        description: 'Fresh vegetables, feta cheese, olives with olive oil dressing',
+        price: 11.99,
+        category: 'salads',
+        icon: '🥗',
+        rating: 4.6
+    },
+    {
+        id: 12,
+        name: 'Tiramisu',
+        description: 'Classic Italian dessert with espresso-soaked ladyfingers',
+        price: 7.99,
+        category: 'desserts',
+        icon: '🍰',
+        rating: 4.8
+    },
+    {
+        id: 13,
+        name: 'Fresh Lemonade',
+        description: 'Freshly squeezed lemons with a hint of mint',
+        price: 4.99,
+        category: 'drinks',
+        icon: '🍋',
+        rating: 4.7
+    },
+    {
+        id: 14,
+        name: 'Mango Smoothie',
+        description: 'Tropical mango blended with yogurt and honey',
+        price: 5.99,
+        category: 'drinks',
+        icon: '🥭',
+        rating: 4.8
+    },
+    {
+        id: 15,
+        name: 'Veggie Supreme Pizza',
+        description: 'Bell peppers, mushrooms, onions, olives on marinara',
+        price: 14.99,
+        category: 'pizza',
+        icon: '🍕',
+        rating: 4.6
+    },
+    {
+        id: 16,
+        name: 'Mushroom Swiss Burger',
+        description: 'Sautéed mushrooms, Swiss cheese, garlic aioli',
+        price: 14.99,
+        category: 'burgers',
+        icon: '🍔',
+        rating: 4.7
+    }
+];
+
+// ================================
+// State
+// ================================
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let activeCategory = 'all';
+
+// ================================
+// DOM Elements
+// ================================
+const categoriesGrid = document.getElementById('categoriesGrid');
+const menuFilters = document.getElementById('menuFilters');
+const menuGrid = document.getElementById('menuGrid');
+const cartBtn = document.getElementById('cartBtn');
+const cartSidebar = document.getElementById('cartSidebar');
+const cartOverlay = document.getElementById('cartOverlay');
+const cartClose = document.getElementById('cartClose');
+const cartItems = document.getElementById('cartItems');
+const cartCount = document.getElementById('cartCount');
+const cartSubtotal = document.getElementById('cartSubtotal');
+const cartDelivery = document.getElementById('cartDelivery');
+const cartTotal = document.getElementById('cartTotal');
+const cartFooter = document.getElementById('cartFooter');
+const checkoutBtn = document.getElementById('checkoutBtn');
+const checkoutModal = document.getElementById('checkoutModal');
+const modalClose = document.getElementById('modalClose');
+const checkoutForm = document.getElementById('checkoutForm');
+const orderSummaryItems = document.getElementById('orderSummaryItems');
+const orderTotal = document.getElementById('orderTotal');
+const successModal = document.getElementById('successModal');
+const orderNumber = document.getElementById('orderNumber');
+const continueBtn = document.getElementById('continueBtn');
+const itemModal = document.getElementById('itemModal');
+const itemModalClose = document.getElementById('itemModalClose');
+const itemModalContent = document.getElementById('itemModalContent');
+const toast = document.getElementById('toast');
+const toastMessage = document.getElementById('toastMessage');
+const contactForm = document.getElementById('contactForm');
+const cardDetails = document.getElementById('cardDetails');
+
+// ================================
+// Initialize
+// ================================
+function init() {
+    renderCategories();
+    renderFilters();
+    renderMenu();
+    updateCart();
+    setupEventListeners();
+}
+
+// ================================
+// Render Functions
+// ================================
+function renderCategories() {
+    categoriesGrid.innerHTML = categories.map(cat => `
+        <div class="category-card ${cat.id === activeCategory ? 'active' : ''}" data-category="${cat.id}">
+            <span class="category-icon">${cat.icon}</span>
+            <span class="category-name">${cat.name}</span>
+        </div>
+    `).join('');
+}
+
+function renderFilters() {
+    const filterBtns = categories.map(cat => `
+        <button class="filter-btn ${cat.id === activeCategory ? 'active' : ''}" data-category="${cat.id}">
+            ${cat.icon} ${cat.name}
+        </button>
+    `).join('');
+    menuFilters.innerHTML = filterBtns;
+}
+
+function renderMenu() {
+    const filtered = activeCategory === 'all' 
+        ? menuItems 
+        : menuItems.filter(item => item.category === activeCategory);
+    
+    menuGrid.innerHTML = filtered.map(item => `
+        <div class="menu-card" data-id="${item.id}">
+            <div class="menu-image">
+                ${item.badge ? `<span class="menu-badge">${item.badge}</span>` : ''}
+                <span>${item.icon}</span>
+            </div>
+            <div class="menu-content">
+                <h3 class="menu-name">${item.name}</h3>
+                <p class="menu-desc">${item.description}</p>
+                <div class="menu-footer">
+                    <span class="menu-price">$${item.price.toFixed(2)}</span>
+                    <div class="menu-rating">⭐ ${item.rating}</div>
+                    <button class="add-btn" data-id="${item.id}" title="Add to cart">+</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderCart() {
+    if (cart.length === 0) {
+        cartItems.innerHTML = `
+            <div class="cart-empty">
+                <div class="cart-empty-icon">🛒</div>
+                <p>Your cart is empty</p>
+            </div>
+        `;
+        cartFooter.style.display = 'none';
+        return;
+    }
+
+    cartFooter.style.display = 'block';
+    cartItems.innerHTML = cart.map(item => `
+        <div class="cart-item" data-id="${item.id}">
+            <div class="cart-item-image">${item.icon}</div>
+            <div class="cart-item-info">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+                <div class="cart-item-controls">
+                    <button class="qty-btn" data-action="decrease" data-id="${item.id}">−</button>
+                    <span class="cart-item-qty">${item.quantity}</span>
+                    <button class="qty-btn" data-action="increase" data-id="${item.id}">+</button>
+                    <button class="cart-item-remove" data-action="remove" data-id="${item.id}">🗑️</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+
+    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const delivery = subtotal > 0 ? 2.99 : 0;
+    const total = subtotal + delivery;
+
+    cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+    cartDelivery.textContent = `$${delivery.toFixed(2)}`;
+    cartTotal.textContent = `$${total.toFixed(2)}`;
+}
+
+function updateCart() {
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCount.textContent = totalItems;
+    renderCart();
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function renderOrderSummary() {
+    orderSummaryItems.innerHTML = cart.map(item => `
+        <div class="order-summary-item">
+            <span>${item.quantity}× ${item.name}</span>
+            <span>$${(item.price * item.quantity).toFixed(2)}</span>
+        </div>
+    `).join('');
+
+    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const delivery = 2.99;
+    orderTotal.textContent = `$${(subtotal + delivery).toFixed(2)}`;
+}
+
+function renderItemModal(item) {
+    itemModalContent.innerHTML = `
+        <div class="item-modal-image">${item.icon}</div>
+        <div class="item-modal-body">
+            <h2 class="item-modal-name">${item.name}</h2>
+            <p class="item-modal-desc">${item.description}</p>
+            <div class="item-modal-meta">
+                <span class="item-modal-price">$${item.price.toFixed(2)}</span>
+                <span class="item-modal-rating">⭐ ${item.rating}</span>
+            </div>
+            <div class="item-qty-selector">
+                <span>Quantity:</span>
+                <div class="qty-controls">
+                    <button class="qty-btn" id="itemQtyDecrease">−</button>
+                    <span class="cart-item-qty" id="itemQty">1</span>
+                    <button class="qty-btn" id="itemQtyIncrease">+</button>
+                </div>
+            </div>
+            <button class="btn btn-primary btn-block btn-lg" id="addToCartModal">
+                Add to Cart — $${item.price.toFixed(2)}
+            </button>
+        </div>
+    `;
+
+    let qty = 1;
+    const qtyDisplay = document.getElementById('itemQty');
+    const addBtn = document.getElementById('addToCartModal');
+
+    document.getElementById('itemQtyDecrease').addEventListener('click', () => {
+        if (qty > 1) {
+            qty--;
+            qtyDisplay.textContent = qty;
+            addBtn.textContent = `Add to Cart — $${(item.price * qty).toFixed(2)}`;
+        }
+    });
+
+    document.getElementById('itemQtyIncrease').addEventListener('click', () => {
+        qty++;
+        qtyDisplay.textContent = qty;
+        addBtn.textContent = `Add to Cart — $${(item.price * qty).toFixed(2)}`;
+    });
+
+    addBtn.addEventListener('click', () => {
+        addToCart(item.id, qty);
+        closeModal(itemModal);
+    });
+}
+
+// ================================
+// Cart Functions
+// ================================
+function addToCart(itemId, quantity = 1) {
+    const item = menuItems.find(i => i.id === itemId);
+    if (!item) return;
+
+    const existingItem = cart.find(i => i.id === itemId);
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        cart.push({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            icon: item.icon,
+            quantity: quantity
+        });
+    }
+
+    updateCart();
+    showToast(`${item.name} added to cart!`);
+}
+
+function updateQuantity(itemId, action) {
+    const item = cart.find(i => i.id === itemId);
+    if (!item) return;
+
+    if (action === 'increase') {
+        item.quantity++;
+    } else if (action === 'decrease') {
+        item.quantity--;
+        if (item.quantity <= 0) {
+            cart = cart.filter(i => i.id !== itemId);
+        }
+    } else if (action === 'remove') {
+        cart = cart.filter(i => i.id !== itemId);
+        showToast('Item removed from cart');
+    }
+
+    updateCart();
+}
+
+// ================================
+// Modal Functions
+// ================================
+function openModal(modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function openCart() {
+    cartSidebar.classList.add('active');
+    cartOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCart() {
+    cartSidebar.classList.remove('active');
+    cartOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// ================================
+// Toast Notification
+// ================================
+function showToast(message) {
+    toastMessage.textContent = message;
+    toast.classList.add('active');
+    setTimeout(() => {
+        toast.classList.remove('active');
+    }, 3000);
+}
+
+// ================================
+// Event Listeners
+// ================================
+function setupEventListeners() {
+    // Category clicks
+    categoriesGrid.addEventListener('click', (e) => {
+        const card = e.target.closest('.category-card');
+        if (card) {
+            activeCategory = card.dataset.category;
+            renderCategories();
+            renderFilters();
+            renderMenu();
+        }
+    });
+
+    // Filter clicks
+    menuFilters.addEventListener('click', (e) => {
+        if (e.target.classList.contains('filter-btn')) {
+            activeCategory = e.target.dataset.category;
+            renderCategories();
+            renderFilters();
+            renderMenu();
+        }
+    });
+
+    // Menu card clicks
+    menuGrid.addEventListener('click', (e) => {
+        const addBtn = e.target.closest('.add-btn');
+        if (addBtn) {
+            e.stopPropagation();
+            addToCart(parseInt(addBtn.dataset.id));
+            return;
+        }
+
+        const card = e.target.closest('.menu-card');
+        if (card) {
+            const item = menuItems.find(i => i.id === parseInt(card.dataset.id));
+            if (item) {
+                renderItemModal(item);
+                openModal(itemModal);
+            }
+        }
+    });
+
+    // Cart
+    cartBtn.addEventListener('click', openCart);
+    cartClose.addEventListener('click', closeCart);
+    cartOverlay.addEventListener('click', closeCart);
+
+    cartItems.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-action]');
+        if (btn) {
+            updateQuantity(parseInt(btn.dataset.id), btn.dataset.action);
+        }
+    });
+
+    // Checkout
+    checkoutBtn.addEventListener('click', () => {
+        if (cart.length === 0) {
+            showToast('Your cart is empty!');
+            return;
+        }
+        closeCart();
+        renderOrderSummary();
+        openModal(checkoutModal);
+    });
+
+    modalClose.addEventListener('click', () => closeModal(checkoutModal));
+    itemModalClose.addEventListener('click', () => closeModal(itemModal));
+
+    // Payment method toggle
+    document.querySelectorAll('input[name="payment"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            cardDetails.style.display = e.target.value === 'card' ? 'block' : 'none';
+        });
+    });
+
+    // Form submission
+    checkoutForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+        
+        if (paymentMethod === 'card') {
+            const cardNumber = document.getElementById('cardNumber').value;
+            const cardExpiry = document.getElementById('cardExpiry').value;
+            const cardCvv = document.getElementById('cardCvv').value;
+            
+            if (!cardNumber || !cardExpiry || !cardCvv) {
+                showToast('Please fill in all card details');
+                return;
+            }
+        }
+
+        closeModal(checkoutModal);
+        
+        // Generate order number
+        const orderNum = Math.random().toString(36).substring(2, 8).toUpperCase();
+        orderNumber.textContent = orderNum;
+        
+        // Clear cart
+        cart = [];
+        updateCart();
+        
+        // Show success
+        openModal(successModal);
+    });
+
+    continueBtn.addEventListener('click', () => {
+        closeModal(successModal);
+        checkoutForm.reset();
+    });
+
+    // Contact form
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        showToast('Message sent successfully!');
+        contactForm.reset();
+    });
+
+    // Close modals on overlay click
+    [checkoutModal, successModal, itemModal].forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal(modal);
+            }
+        });
+    });
+
+    // Card input formatting
+    const cardNumber = document.getElementById('cardNumber');
+    cardNumber.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+        e.target.value = value;
+    });
+
+    const cardExpiry = document.getElementById('cardExpiry');
+    cardExpiry.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length >= 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2);
+        }
+        e.target.value = value;
+    });
+}
+
+// ================================
+// Start App
+// ================================
+init();
